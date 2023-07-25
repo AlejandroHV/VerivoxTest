@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace VerivoxTest.Domain.Models.Responses
+namespace VerivoxTest.Application.Especifications.Responses
 {
     public class Response<T>
     {
@@ -8,7 +8,7 @@ namespace VerivoxTest.Domain.Models.Responses
 
         public int ItemCount { get; set; }
 
-        
+
 
     }
 }

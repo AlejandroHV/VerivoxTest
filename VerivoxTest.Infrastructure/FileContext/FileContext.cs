@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using VerivoxTest.Application.Configurations;
-using VerivoxTest.Application.Data.Context;
-using VerivoxTest.Application.Data.Repository;
+using System.IO;using System.Text;
+using System.Text.Json;using VerivoxTest.Application.Configurations;
+using VerivoxTest.Application.Especifications.Context;
 using VerivoxTest.Domain.Models.Entities;
 using VerivoxTest.Infrastructure.FileContext.JsonStructure;
 
-namespace VerivoxTest.Infrastructure.FileDataSource
+namespace VerivoxTest.Infrastructure.FileContext
 {
     public class FileContext : IContext
     {
@@ -23,9 +18,14 @@ namespace VerivoxTest.Infrastructure.FileDataSource
             PopulateData();
         }
 
+        /// <summary>
+        /// This method acts like a seed on a database but instead the data is being obtained from a file.
+        /// TO DO: Move reading files from disc to a separate utility class. 
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void PopulateData()
         {
-            var mockFilePath = AppSettings.MockDataFilePath;
+            var mockFilePath = AppSettingsBinding.MockDataFilePath;
             var fileData = string.Empty;
 
             if (mockFilePath == null)
@@ -41,12 +41,12 @@ namespace VerivoxTest.Infrastructure.FileDataSource
             }
 
             if (fileData == null)
-                throw new Exception("Could not Initialize the data source");
+                throw new Exception("Could not read the data source");
 
             var mockData = JsonSerializer.Deserialize<MockDataStructure>(fileData);
 
             if (mockData.Products == null)
-                throw new Exception("Could not Initialize the data source");
+                throw new Exception("Could not initialize the data source");
 
             Products = mockData.Products;
         }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VerivoxTest.Domain.Models.Responses;
+using VerivoxTest.Application.Especifications.Responses;
 
-namespace VerivoxTest.Domain.Models.Requests
+namespace VerivoxTest.Application.Especifications.Requests
 {
     public class Request : IRequest<Response<string>>
     {

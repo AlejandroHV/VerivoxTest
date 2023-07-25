@@ -1,5 +1,4 @@
-using VerivoxTest.Domain.Models.Entities;
-
+using VerivoxTest.Domain.Models.Entities.Interfaces;
 
 namespace VerivoxTest.Domain.Models.Entities.Implementation
 {
@@ -11,10 +10,10 @@ namespace VerivoxTest.Domain.Models.Entities.Implementation
 
         }
 
-        public int Calculate(int annualConsumption)
+        public async Task<double> Calculate(double annualConsumption)
         {
-            var anualCost = 0;
-            if (annualConsumption != 0)
+            var anualCost = 0d;
+            if (annualConsumption > 0)
             {
                 anualCost = 800;
                 var res = annualConsumption - 4000;

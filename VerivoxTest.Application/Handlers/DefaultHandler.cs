@@ -1,13 +1,6 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using VerivoxTest.Domain.Models.Request;
-using VerivoxTest.Domain.Models.Requests;
-using VerivoxTest.Domain.Models.Responses;
+using VerivoxTest.Application.Especifications.Requests;
+using VerivoxTest.Application.Especifications.Responses;
 
 namespace VerivoxTest.Application.Handlers
 {
@@ -18,13 +11,10 @@ namespace VerivoxTest.Application.Handlers
     public class DefaultHandler : IRequestHandler<Request, Response<string>>
     {
 
-        public Task<Response<string>> Handle(Request request, CancellationToken cancellationToken)
+        public  async Task<Response<string>> Handle(Request request, CancellationToken cancellationToken)
         {
 
-            
-
-
-            return Task.FromResult(new Response<string> { Payload= new List<string> { "Hello" } });
+            return new Response<string> { Payload= new List<string> { "Hello" } };
         }
     }
 }

@@ -7,10 +7,10 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using VerivoxTest.Application.Configurations;
-using VerivoxTest.Application.Data.Context;
+using VerivoxTest.Application.Especifications.Context;
 using VerivoxTest.Domain.Models.Entities;
 
-namespace VerivoxTest.Infrastructure.FileDataSource
+namespace VerivoxTest.Infrastructure.FileContext
 {
     public static class FileContextConfig
     {

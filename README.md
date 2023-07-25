@@ -29,11 +29,14 @@ instances of them using reflection and then executing the calculations.
 * Run `dotnet build` command to generate the build of the project.
 
 ## Usage
-ON PROGRESS.
+IN PROGRESS.
+* Clone the repo. 
+* Open a bash or sh terminal on the project root "Verivox" folder. 
+* Run the "runApp.sh" `./runApp.sh`
 Current: 
 * Clone the repo. 
 * Run `dotnet build` command to generate the build of the project.
-* Run `dotnet run --projectVerivoxTest.API/` command to run the API/Endpoint.
+* Run `dotnet run --project VerivoxTest.API/` command to run the API/Endpoint.
 * Open in a browser the localhost path "http://localhost:5002/swagger/index.html" to see the swagger documentation. 
 * Execute any queries to the tariff endpoint to get the tariff comparations.
 

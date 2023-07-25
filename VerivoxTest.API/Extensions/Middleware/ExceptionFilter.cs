@@ -6,6 +6,10 @@ using VerivoxTest.Application.Especifications.Responses;
 
 namespace VerivoxTest.Application.API.Extensions.Middleware
 {
+    /// <summary>
+    /// Filter to catch any exceptions and format them in the same way. 
+    /// TO DO: Switch to handle specific exceptions. 
+    /// </summary>
     public class ExceptionFilter : IExceptionFilter
     {
         private readonly IHostEnvironment _hostEnvironment;
@@ -16,6 +20,7 @@ namespace VerivoxTest.Application.API.Extensions.Middleware
             _hostEnvironment = hostEnvironment; 
             _logger = logger;
         }
+
 
         public void OnException(ExceptionContext context)
         {

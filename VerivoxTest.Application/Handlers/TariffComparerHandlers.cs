@@ -11,7 +11,7 @@ namespace VerivoxTest.Application.Handlers
     public class TariffComparerHandlers : IRequestHandler<ConsumptionComparerRequest, Response<ConsumptionComparerResponse>>
     {
 
-        IContext _context;
+        private IContext _context;
         private readonly ILogger<TariffComparerHandlers> _logger;
         public TariffComparerHandlers(IContext context, ILogger<TariffComparerHandlers> logger)
         {
@@ -41,7 +41,7 @@ namespace VerivoxTest.Application.Handlers
 
             var dbProducts = _context.Products.Where(x => x.Active == true);
 
-            if (dbProducts.Any())
+            if (!dbProducts.Any())
             {
                 return response;
             }
@@ -60,12 +60,12 @@ namespace VerivoxTest.Application.Handlers
                 var calculationResult = new ConsumptionComparerResponse()
                 {
                     ProductName = newProduct.Name,
-                    Consumption = await newProduct.Calculate(request.YearlyConsumption)
+                    Consumption = await newProduct.Calculate(request.AnnualConsumption)
                 };
 
                 calculations.Add(calculationResult);
             }
-            response.Payload = calculations;
+            response.Payload = calculations.OrderBy(x=>x.Consumption).ToList();
 
             _logger.LogInformation($"Finishing execution of {this.GetType().Name} response {response.Payload}");
             return response;

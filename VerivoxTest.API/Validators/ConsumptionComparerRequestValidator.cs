@@ -7,7 +7,7 @@ namespace VerivoxTest.Application.API.Validators
     {
         public ConsumptionComparerRequestValidator()
         {
-            RuleFor(request => request.YearlyConsumption).NotEmpty().GreaterThanOrEqualTo(0).WithMessage("Annual Consumption must be greater than 0");
+            RuleFor(request => request.AnnualConsumption).NotEmpty().GreaterThanOrEqualTo(0).WithMessage("Annual Consumption must be greater than 0");
         }
     }
 }

@@ -21,6 +21,7 @@ ServicesRegistration.RegisterServices(builder.Services);
 builder.Services.AddControllers(option =>
 {
     option.Filters.Add<ExceptionFilter>();
+    
 });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TariffComparerHandlers).Assembly));
@@ -38,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

@@ -7,11 +7,14 @@ using VerivoxTest.Application.Models.Request;
 namespace Verivox.Controllers;
 
 /// <summary>
-/// This Controller can be used to bring the specific tariffs by Id/Name. 
-/// Another get method.
+/// Compares the tariff of the different or existent products on the system.
+/// Given an AnnualConsumption  a calculation is executed to get the cost of the energy consumption. 
+/// Controller can be used to bring the specific tariffs by Id/Name. 
+/// Another get method to get an specific tariff.
+/// TO DO: Add swagger attributes to improve the documentation of the API.
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TarrifController : ControllerBase
 {
     private readonly IMediator _mediator;

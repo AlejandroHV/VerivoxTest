@@ -8,6 +8,10 @@ using VerivoxTest.Infrastructure.FileContext.JsonStructure;
 
 namespace VerivoxTest.Infrastructure.FileContext
 {
+    /// <summary>
+    /// DBContext replacement to get information from a file instead of a Database.
+    /// The information of the different entities is mapped as a list of Entities. 
+    /// </summary>
     public class FileContext : IContext
     {
 

@@ -7,7 +7,7 @@ namespace VerivoxTest.Application.Models.Request
 {
     public class ConsumptionComparerRequest : IRequest<Response<ConsumptionComparerResponse>>
     {
-        public double YearlyConsumption { get; set; }
+        public double AnnualConsumption { get; set; }
 
     }
 }

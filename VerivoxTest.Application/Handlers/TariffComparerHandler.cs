@@ -1,19 +1,21 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using VerivoxTest.Application.Especifications.Context;
+using VerivoxTest.Application.Especifications.Requests;
 using VerivoxTest.Application.Especifications.Responses;
 using VerivoxTest.Application.Models.Request;
 using VerivoxTest.Application.Models.Responses;
+using VerivoxTest.Domain.Models.Entities;
 using VerivoxTest.Domain.Models.Entities.Interfaces;
 
 namespace VerivoxTest.Application.Handlers
 {
-    public class TariffComparerHandlers : IRequestHandler<ConsumptionComparerRequest, Response<ConsumptionComparerResponse>>
+    public class TariffComparerHandler : IRequestHandler<TariffComparerRequest, Response<TariffComparerResponse>>
     {
 
         private IContext _context;
-        private readonly ILogger<TariffComparerHandlers> _logger;
-        public TariffComparerHandlers(IContext context, ILogger<TariffComparerHandlers> logger)
+        private readonly ILogger<TariffComparerHandler> _logger;
+        public TariffComparerHandler(IContext context, ILogger<TariffComparerHandler> logger)
         {
             _context = context;
             _logger = logger;
@@ -30,45 +32,51 @@ namespace VerivoxTest.Application.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<Response<ConsumptionComparerResponse>> Handle(ConsumptionComparerRequest request, CancellationToken cancellationToken)
+        public async Task<Response<TariffComparerResponse>> Handle(TariffComparerRequest request, CancellationToken cancellationToken)
         {
 
             _logger.LogInformation($"Entering {this.GetType().Name} ");
-            var calculations = new List<ConsumptionComparerResponse>();
+            var calculations = new List<TariffComparerResponse>();
 
-            var response = new Response<ConsumptionComparerResponse>();
+            var response = new Response<TariffComparerResponse>();
 
 
-            var dbProducts = _context.Products.Where(x => x.Active == true);
+            var dbProducts = _context.Products;
 
             if (!dbProducts.Any())
             {
                 return response;
             }
 
+            dbProducts = dbProducts.Where(x => x.Active == true).ToList();
+
             foreach (var product in dbProducts)
             {
-
-                var productIntance = Activator.CreateInstance(product.Assembly, product.AssemblyType);
-
-                if (productIntance == null)
-                {
-                    throw new Exception("Could not create the product");
-                }
-
-                var newProduct = (IProduct)productIntance.Unwrap();
-                var calculationResult = new ConsumptionComparerResponse()
-                {
-                    ProductName = newProduct.Name,
-                    Consumption = await newProduct.Calculate(request.AnnualConsumption)
-                };
-
-                calculations.Add(calculationResult);
+                var productCalculation =await CreateProductInstance(request.AnnualConsumption, product);
+                calculations.Add(productCalculation);
             }
             response.Payload = calculations.OrderBy(x=>x.Consumption).ToList();
-
+            response.ItemCount = response.Payload.Count;
             _logger.LogInformation($"Finishing execution of {this.GetType().Name} response {response.Payload}");
             return response;
+        }
+
+        private async Task<TariffComparerResponse> CreateProductInstance(double annualConsumption, Product product)
+        {
+            var productIntance = Activator.CreateInstance(product.Assembly, product.AssemblyType);
+
+            if (productIntance == null)
+            {
+                throw new Exception("Could not create the product");
+            }
+
+            var newProduct = (IProduct)productIntance.Unwrap();
+            var calculationResult = new TariffComparerResponse()
+            {
+                ProductName = newProduct.Name,
+                Consumption = await newProduct.Calculate(annualConsumption)
+            };
+            return calculationResult;
         }
     }
 }

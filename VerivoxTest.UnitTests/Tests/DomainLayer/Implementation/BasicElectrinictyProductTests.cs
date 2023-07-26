@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VerivoxTest.Domain.Models.Entities.Implementation;
+﻿using VerivoxTest.Domain.Models.Entities.Implementation;
 
-namespace VerivoxTest.UnitTests.Domain.Implementation
+namespace VerivoxTest.UnitTests.Tests.DomainLayer.Implementation
 {
     [TestFixture]
     public class BasicElectrinictyProductTests
@@ -24,7 +19,7 @@ namespace VerivoxTest.UnitTests.Domain.Implementation
         public async Task<double> Calculate_ValidAnnualConsumptionTariff_CorrectAnualCost(double annualConsumption)
         {
 
-            var cost =await _sut.Calculate(annualConsumption);
+            var cost = await _sut.Calculate(annualConsumption);
 
             return cost;
         }
@@ -34,9 +29,9 @@ namespace VerivoxTest.UnitTests.Domain.Implementation
         {
             var zeroAnnualConsumption = 0;
 
-            var cost =  _sut.Calculate(zeroAnnualConsumption);
+            var cost = _sut.Calculate(zeroAnnualConsumption);
 
-            Assert.AreEqual(0,cost.Result);
+            Assert.AreEqual(0, cost.Result);
         }
 
         [Test]

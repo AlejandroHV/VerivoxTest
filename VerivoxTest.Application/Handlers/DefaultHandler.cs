@@ -10,10 +10,8 @@ namespace VerivoxTest.Application.Handlers
     /// </summary>
     public class DefaultHandler : IRequestHandler<Request, Response<string>>
     {
-
         public  async Task<Response<string>> Handle(Request request, CancellationToken cancellationToken)
         {
-
             return new Response<string> { Payload= new List<string> { "Hello" } };
         }
     }

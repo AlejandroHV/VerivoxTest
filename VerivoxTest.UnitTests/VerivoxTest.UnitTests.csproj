@@ -11,9 +11,15 @@
   <ItemGroup>
     <None Remove="Assets\MockData.json" />
     <None Remove="Assets\MockError.json" />
+    <None Remove="Assets\MockProductsEmpty.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\MockProductsEmpty.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="Assets\MockError.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

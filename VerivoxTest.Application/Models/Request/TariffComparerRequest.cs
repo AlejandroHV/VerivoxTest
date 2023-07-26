@@ -5,7 +5,7 @@ using VerivoxTest.Application.Models.Responses;
 
 namespace VerivoxTest.Application.Models.Request
 {
-    public class ConsumptionComparerRequest : IRequest<Response<ConsumptionComparerResponse>>
+    public class TariffComparerRequest : IRequest<Response<TariffComparerResponse>>
     {
         public double AnnualConsumption { get; set; }
 

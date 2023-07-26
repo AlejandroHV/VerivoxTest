@@ -9,12 +9,14 @@ In order to dynamically get the tariff of different products obtained from the d
 instances of them using reflection and then executing the calculations. 
 
 ## TO DO's:
-* Increase the coverage of the Unit Tests for the different layers. Currently the unit tests cover the Product tariff calculation and the FileContext.
+* Increase the coverage of the Unit Tests for the different layers. Currently the unit tests cover the Product tariff calculation and the FileContext. -- INCREASED.
 * Basic configuration for the API such as CORS, Versioning. 
-* Improve the Swagger documentation. Add the descriptions for the Request object and the return type of the controller. 
+* --DONE--Improve the Swagger documentation. Add the descriptions for the Request object and the return type of the controller. --DONE
 * Implement the Unit of work/Repository pattern to handle an actual DBContext. 
 * Implement Authentication through JWT tokens. 
 * Implement the command pattern to send request from the Application layer to the Domain layer. 
+* Implement a factory pattern for the Product creation to avoid storing the assembly name in the database. 
+
 
 ## Project Support Features
 * Endpoints to get information about:

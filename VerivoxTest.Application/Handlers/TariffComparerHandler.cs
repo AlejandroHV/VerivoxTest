@@ -57,6 +57,7 @@ namespace VerivoxTest.Application.Handlers
             }
             response.Payload = calculations.OrderBy(x=>x.Consumption).ToList();
             response.ItemCount = response.Payload.Count;
+
             _logger.LogInformation($"Finishing execution of {this.GetType().Name} response {response.Payload}");
             return response;
         }

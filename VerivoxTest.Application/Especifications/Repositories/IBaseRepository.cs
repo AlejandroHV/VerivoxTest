@@ -1,6 +1,6 @@
 ﻿using VerivoxTest.Domain.Models.Entities;
 
-namespace VerivoxTest.Application.Especifications.Repository
+namespace VerivoxTest.Application.Especifications.Repositories
 {
     /// <summary>
     /// The intention of having this base repository is to implement the Unit of Work Pattern and use this repository inside.

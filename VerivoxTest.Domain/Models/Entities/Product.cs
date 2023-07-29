@@ -10,7 +10,7 @@ namespace VerivoxTest.Domain.Models.Entities
     public class Product : Entity
     {
         [JsonPropertyName("name")]
-        public string Name {get; set;}
+        public string Name { get; set; }
 
         [JsonPropertyName("active")]
         public bool Active { get; set; }
@@ -21,6 +21,8 @@ namespace VerivoxTest.Domain.Models.Entities
         [JsonPropertyName("assembly")]
         public string Assembly { get; set; }
 
+        [JsonPropertyName("product_type")]
+        public int ProdutType { get; set; }
 
     }
 }

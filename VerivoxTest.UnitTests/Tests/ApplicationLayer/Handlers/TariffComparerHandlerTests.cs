@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using VerivoxTest.Application.Configurations;
 using VerivoxTest.Application.Especifications.Context;
+using VerivoxTest.Application.Especifications.Factories.Interfaces;
 using VerivoxTest.Application.Handlers;
 using VerivoxTest.Application.Models.Request;
-using VerivoxTest.Application.Models.Responses;
 using VerivoxTest.Domain.Models.Entities;
+using VerivoxTest.Domain.Models.Entities.Implementation;
+using VerivoxTest.Domain.Models.Entities.Interfaces;
 
 namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
 {
@@ -26,6 +23,7 @@ namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
     {
         private Mock<IContext> _contextMock;
         private Mock<ILogger<TariffComparerHandler>> _loggerMock;
+        private Mock<IFactory<IProduct>> _factoryMock;
         private TariffComparerHandler _sut;
         private CancellationToken _cancellationToken;
 
@@ -34,25 +32,42 @@ namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
         {
             CancellationTokenSource cts = new();
             _cancellationToken = cts.Token;
+            AppSettingsBinding.ShouldUseFactory = true;
 
             var mockProducts = new List<Product>();
-            mockProducts.Add(new Product() { Active = true, Assembly = "VerivoxTest.Domain", AssemblyType = "VerivoxTest.Domain.Models.Entities.Implementation.BasicElectricityProduct", Name = "Basic" });
-            
+            mockProducts.Add(new Product()
+            {
+                Active = true,
+                Assembly = "VerivoxTest.Domain",
+                AssemblyType = "VerivoxTest.Domain.Models.Entities.Implementation.BasicElectricityProduct",
+                ProdutType = 0,
+                Name = "Basic"
+            });
+
             _contextMock = new Mock<IContext>();
             _contextMock.Setup(x => x.Products).Returns(mockProducts);
 
             _loggerMock = new Mock<ILogger<TariffComparerHandler>>();
+            _factoryMock = new Mock<IFactory<IProduct>>();
 
-            
-            _sut = new TariffComparerHandler(_contextMock.Object, _loggerMock.Object);
+            //Mocking the factory to return the instances.
+            _factoryMock.Setup(x => x.Create(0)).Returns(new BasicElectricityProduct());
+            _factoryMock.Setup(x => x.Create(1)).Returns(new PackagedTariffProduct());
+            _factoryMock.Setup(x => x.Create(It.IsNotIn(0, 1))).Returns((IProduct)null);
 
+            _sut = new TariffComparerHandler(_contextMock.Object, _loggerMock.Object, _factoryMock.Object);
 
+            /*If we dont want to mock the factory and test it here. 
+             * The factory should be tested on it is own class. 
+             * var factoryObject = new ProductFactory();
+            _sut = new TariffComparerHandler(_contextMock.Object, _loggerMock.Object, factoryObject);
+            */
         }
 
         [Test]
         public void Handle_MockingAllTheExternalDependencies_ShouldReturnConsumptions()
         {
-           
+
             var request = new TariffComparerRequest();
             request.AnnualConsumption = 3500d;
 
@@ -67,7 +82,7 @@ namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
         [TestCase(6000d, ExpectedResult = 1380d)]
         public double Handle_DifferentConsumptions_ShouldReturnConsumptions(double annualConsumption)
         {
-           
+
             var request = new TariffComparerRequest();
             request.AnnualConsumption = annualConsumption;
 
@@ -81,7 +96,7 @@ namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
         public void Handle_ContextMockProductsEmptyList_ReturnNull()
         {
             _contextMock.Setup(x => x.Products).Returns(new List<Product>());
-            
+
             var request = new TariffComparerRequest();
             request.AnnualConsumption = 3500d;
 
@@ -92,17 +107,61 @@ namespace VerivoxTest.UnitTests.Tests.ApplicationLayer.Handlers
         }
 
         [Test]
-        public void Handle_MockingAllTheExternalDependencie_ShouldReturnConsumptions()
+        public void Handle_NonExistentProductImplementation_ShouldThrowTypeLoadException()
         {
-           
+            AppSettingsBinding.ShouldUseFactory = false;
+            var mockProducts = new List<Product>();
+            var badAssembly = "BadAssembly";
+
+
+            mockProducts.Add(new Product()
+            {
+                Active = true,
+                Assembly = "VerivoxTest.Domain",
+                AssemblyType = badAssembly,
+                Name = "Basic",
+                ProdutType = 0
+            });
+
+            _contextMock.Setup(x => x.Products).Returns(mockProducts);
             var request = new TariffComparerRequest();
             request.AnnualConsumption = 3500d;
 
-            var actual = _sut.Handle(request, _cancellationToken);
+            AsyncTestDelegate testDelegate = async () => { await _sut.Handle(request, _cancellationToken); };
 
-            Assert.That(actual.Result.Payload, Is.Not.Null);
+            Assert.ThrowsAsync<TypeLoadException>(testDelegate);
 
         }
+
+
+        [Test]
+        public void Handle_BadClassAsembly_ShouldThrowTypeLoadException()
+        {
+            AppSettingsBinding.ShouldUseFactory = false;
+            var mockProducts = new List<Product>();
+            var badAssembly = "VerivoxTest.Domain.Models.Entities.Product";
+            mockProducts.Add(new Product()
+            {
+                Active = true,
+                Assembly = "VerivoxTest.Domain",
+                AssemblyType = badAssembly,
+                Name = "Basic",
+                ProdutType = 0
+            });
+
+            _contextMock.Setup(x => x.Products).Returns(mockProducts);
+
+            var request = new TariffComparerRequest();
+            request.AnnualConsumption = 3500d;
+
+
+            AsyncTestDelegate testDelegate = async () => { await _sut.Handle(request, _cancellationToken); };
+
+
+            Assert.ThrowsAsync<InvalidCastException>(testDelegate);
+
+        }
+
 
     }
 }

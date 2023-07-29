@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using VerivoxTest.Application.Configurations;
 using VerivoxTest.Application.Especifications.Context;
+using VerivoxTest.Application.Especifications.Factories.Interfaces;
 using VerivoxTest.Application.Especifications.Requests;
 using VerivoxTest.Application.Especifications.Responses;
 using VerivoxTest.Application.Models.Request;
@@ -15,10 +17,14 @@ namespace VerivoxTest.Application.Handlers
 
         private IContext _context;
         private readonly ILogger<TariffComparerHandler> _logger;
-        public TariffComparerHandler(IContext context, ILogger<TariffComparerHandler> logger)
+        private readonly IFactory<IProduct> _productFactory;
+        
+
+        public TariffComparerHandler(IContext context, ILogger<TariffComparerHandler> logger, IFactory<IProduct> productFactory)
         {
             _context = context;
             _logger = logger;
+            _productFactory = productFactory;
 
         }
 
@@ -40,7 +46,6 @@ namespace VerivoxTest.Application.Handlers
 
             var response = new Response<TariffComparerResponse>();
 
-
             var dbProducts = _context.Products;
 
             if (!dbProducts.Any())
@@ -52,7 +57,22 @@ namespace VerivoxTest.Application.Handlers
 
             foreach (var product in dbProducts)
             {
-                var productCalculation =await CreateProductInstance(request.AnnualConsumption, product);
+                var productCalculation = new TariffComparerResponse();
+
+                if (AppSettingsBinding.ShouldUseFactory)
+                {
+                    var productInstance = _productFactory.Create(product.ProdutType);
+                    productCalculation = new TariffComparerResponse()
+                    {
+                        ProductName = productInstance.Name,
+                        Consumption = await productInstance.Calculate(request.AnnualConsumption)
+                    };
+                    
+                }else
+                {
+                    productCalculation = await CreateProductInstance(request.AnnualConsumption, product);
+                }
+                
                 calculations.Add(productCalculation);
             }
             response.Payload = calculations.OrderBy(x=>x.Consumption).ToList();

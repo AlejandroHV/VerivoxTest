@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VerivoxTest.Application.Especifications.Repository;
+using VerivoxTest.Application.Especifications.Repositories;
 using VerivoxTest.Domain.Models.Entities;
 
 namespace VerivoxTest.Infrastructure.FileContext.Implementations

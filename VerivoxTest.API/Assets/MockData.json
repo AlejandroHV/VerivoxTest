@@ -6,7 +6,7 @@
       "id": "4238d32f-6b58-433e-a339-9f002174f538",
       "assembly_type": "VerivoxTest.Domain.Models.Entities.Implementation.BasicElectricityProduct",
       "assembly": "VerivoxTest.Domain",
-      "product_type": "0"
+      "product_type": 0
        
     },
     {
@@ -15,7 +15,7 @@
       "id": "324aab61-0da6-4c37-a7ed-7b32d64b33c8",
       "assembly_type": "VerivoxTest.Domain.Models.Entities.Implementation.PackagedTariffProduct",
       "assembly": "VerivoxTest.Domain",
-      "product_type": "1"
+      "product_type": 1
     }
   ]
 

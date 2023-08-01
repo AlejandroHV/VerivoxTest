@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace VerivoxTest.Domain.Models.Entities
 {
@@ -16,13 +11,13 @@ namespace VerivoxTest.Domain.Models.Entities
         public bool Active { get; set; }
 
         [JsonPropertyName("assembly_type")]
-        public string AssemblyType { get; set; }
+        public required string AssemblyType { get; set; }
 
         [JsonPropertyName("assembly")]
-        public string Assembly { get; set; }
+        public required string Assembly { get; set; }
 
         [JsonPropertyName("product_type")]
-        public int ProdutType { get; set; }
+        public required int ProdutType { get; set; }
 
     }
 }

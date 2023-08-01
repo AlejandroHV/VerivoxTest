@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using VerivoxTest.Application.API.Validators;
+using VerivoxTest.Application.Especifications.Factories;
 using VerivoxTest.Application.Especifications.Factories.Interfaces;
 using VerivoxTest.Domain.Models.Entities.Interfaces;
 
@@ -10,7 +11,7 @@ public class ServicesRegistration
     {
 
 
-        services.AddSingleton<IFactory<IProduct>>();
+        services.AddSingleton<IFactory<IProduct>, ProductFactory>();
         services.AddValidatorsFromAssemblyContaining<ConsumptionComparerRequestValidator>();
 
     }
